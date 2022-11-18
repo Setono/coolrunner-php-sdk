@@ -29,6 +29,6 @@ final class ServicepointsEndpoint extends Endpoint implements ServicepointsEndpo
 
     public function findById(string $carrier, string $id): ResponseInterface
     {
-        // TODO: Implement findById() method.
+        return $this->client->get(sprintf('servicepoints/%s/%s', $carrier, $id));
     }
 }
