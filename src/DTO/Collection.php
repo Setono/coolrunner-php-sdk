@@ -6,7 +6,7 @@ namespace Setono\CoolRunner\DTO;
 
 use ArrayIterator;
 use Psl;
-use Setono\CoolRunner\Client\Response\ResponseInterface;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * @template T
@@ -23,7 +23,8 @@ final class Collection implements \Countable, \IteratorAggregate
     {
         Psl\invariant(method_exists($entryClass, 'fromArray'), 'The $entryClass %s MUST have the static method "fromArray(array $data)"', $entryClass);
 
-        $data = $response->toArray();
+        $data = json_decode((string) $response->getBody(), true, 512, \JSON_THROW_ON_ERROR);
+        Psl\invariant(is_array($data), 'The decoded JSON MUST be of type array');
 
         // find the collection key
         $keys = array_keys($data);

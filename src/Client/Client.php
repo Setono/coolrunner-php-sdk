@@ -8,11 +8,10 @@ use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
 use Psr\Http\Client\ClientInterface as HttpClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Setono\CoolRunner\Client\Endpoint\ServicepointsEndpoint;
 use Setono\CoolRunner\Client\Endpoint\ServicepointsEndpointInterface;
-use Setono\CoolRunner\Client\Response\Response;
-use Setono\CoolRunner\Client\Response\ResponseInterface;
 
 final class Client implements ClientInterface
 {
@@ -38,14 +37,12 @@ final class Client implements ClientInterface
     {
         $url = sprintf('https://api.coolrunner.dk/v3/%s', $uri);
 
-        return new Response(
-            $this->getHttpClient()
-                ->sendRequest(
-                    $this->getRequestFactory()
-                        ->createRequest('GET', $url)
-                        ->withHeader('Authorization', sprintf('Basic %s', base64_encode($this->username . ':' . $this->token)))
-                )
-        );
+        return $this->getHttpClient()
+            ->sendRequest(
+                $this->getRequestFactory()
+                    ->createRequest('GET', $url)
+                    ->withHeader('Authorization', sprintf('Basic %s', base64_encode($this->username . ':' . $this->token)))
+            );
     }
 
     public function servicepoints(): ServicepointsEndpointInterface

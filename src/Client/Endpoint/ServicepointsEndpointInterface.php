@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\CoolRunner\Client\Endpoint;
 
-use Setono\CoolRunner\Client\Response\ResponseInterface;
+use Psr\Http\Message\ResponseInterface;
 
 interface ServicepointsEndpointInterface extends EndpointInterface
 {
