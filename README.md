@@ -16,7 +16,52 @@ $ composer require setono/coolrunner-php-sdk
 
 ## Usage
 
-TODO
+```php
+<?php
+
+use Setono\CoolRunner\Client\Client;
+use Setono\CoolRunner\DTO\Collection;
+use Setono\CoolRunner\DTO\Servicepoint;
+
+require_once '../vendor/autoload.php';
+
+$client = new Client('USERNAME', 'TOKEN');
+$response = $client
+    ->servicepoints()
+    ->find('gls', 'DK', 'Stigsborgvej 60 4. th.', '9400', 'Nørresundby')
+;
+
+/** @var list<Servicepoint> $servicepoints */
+$servicepoints = Collection::fromResponse($response, Servicepoint::class);
+
+foreach ($servicepoints as $servicepoint) {
+    echo $servicepoint->name . "\n";
+    echo $servicepoint->address->street . "\n";
+    echo $servicepoint->address->zipCode . ' ' . $servicepoint->address->city . "\n";
+    echo $servicepoint->address->countryCode . "\n\n";
+}
+```
+
+will output something like:
+
+```
+Min Købmand Nørre Uttrup
+Nørre Uttrup Torv 15
+9400 Nørresundby
+DK
+
+Shell 7-Eleven Nørresundby
+Østergade 27-29
+9400 Nørresundby
+DK
+
+Next-Data.Dk
+Østerbrogade 79
+9400 Nørresundby
+DK
+
+...
+```
 
 [ico-version]: https://poser.pugx.org/setono/coolrunner-php-sdk/v/stable
 [ico-license]: https://poser.pugx.org/setono/coolrunner-php-sdk/license
