@@ -20,12 +20,10 @@ final class Day
 
     public static function fromArray(array $data): self
     {
-        $specification = Type\shape([
+        $data = Type\shape([
             'from' => Type\string(),
             'to' => Type\string(),
-        ]);
-
-        $data = $specification->assert($data);
+        ])->assert($data);
 
         return new self(Time::fromString($data['from']), Time::fromString($data['to']));
     }

@@ -50,7 +50,7 @@ final class OpeningHours
 
     public static function fromArray(array $data): self
     {
-        $specification = Type\shape([
+        $data = Type\shape([
             'monday' => Type\shape([], true),
             'tuesday' => Type\shape([], true),
             'wednesday' => Type\shape([], true),
@@ -58,9 +58,7 @@ final class OpeningHours
             'friday' => Type\shape([], true),
             'saturday' => Type\shape([], true),
             'sunday' => Type\shape([], true),
-        ]);
-
-        $data = $specification->assert($data);
+        ])->assert($data);
 
         return new self(
             Day::fromArray($data['monday']),

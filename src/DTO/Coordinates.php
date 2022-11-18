@@ -22,12 +22,10 @@ final class Coordinates
 
     public static function fromArray(array $data): self
     {
-        $specification = Type\shape([
+        $data = Type\shape([
             'latitude' => Type\float(),
             'longitude' => Type\float(),
-        ]);
-
-        $data = $specification->assert($data);
+        ])->assert($data);
 
         return new self($data['latitude'], $data['longitude']);
     }

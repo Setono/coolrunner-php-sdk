@@ -48,16 +48,14 @@ final class Servicepoint
 
     public static function fromArray(array $data): self
     {
-        $specification = Type\shape([
+        $data = Type\shape([
             'id' => Type\string(),
             'name' => Type\string(),
             'distance' => Type\optional(Type\int()),
             'address' => Type\shape([], true),
             'coordinates' => Type\shape([], true),
             'opening_hours' => Type\shape([], true),
-        ]);
-
-        $data = $specification->assert($data);
+        ])->assert($data);
 
         return new self(
             $data['id'],

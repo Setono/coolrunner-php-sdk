@@ -30,14 +30,12 @@ final class Address
 
     public static function fromArray(array $data): self
     {
-        $specification = Type\shape([
+        $data = Type\shape([
             'street' => Type\string(),
             'zip_code' => Type\string(),
             'city' => Type\string(),
             'country_code' => Type\string(),
-        ]);
-
-        $data = $specification->assert($data);
+        ])->assert($data);
 
         return new self($data['street'], $data['zip_code'], $data['city'], $data['country_code']);
     }
