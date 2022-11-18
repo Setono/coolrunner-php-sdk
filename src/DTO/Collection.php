@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Setono\CoolRunner\DTO;
 
+use Psl;
 use Setono\CoolRunner\Client\Response\ResponseInterface;
-use Webmozart\Assert\Assert;
 
 /**
  * @template T
@@ -20,15 +20,15 @@ final class Collection
      */
     public static function fromResponse(ResponseInterface $response, string $entryClass, string $key): self
     {
-        Assert::methodExists($entryClass, 'fromArray');
+        Psl\invariant(method_exists($entryClass, 'fromArray'), 'The $entryClass MUST have the static method "fromArray(array $data)"');
 
         $data = $response->toArray();
-        Assert::keyExists($data, $key);
+        Psl\invariant(isset($data[$key]), 'The key "%s" does not exist on the response array', $key);
 
         $collection = new self();
 
         foreach ($data[$key] as $datum) {
-            Assert::isArray($datum);
+            Psl\invariant(is_array($datum), 'Each item on the collection MUST be of type array');
 
             /** @psalm-suppress MixedMethodCall */
             $collection->entries[] = $entryClass::fromArray($datum);
