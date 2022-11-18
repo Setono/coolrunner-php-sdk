@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Setono\CoolRunner\DTO;
 
+use ArrayIterator;
 use Psl;
 use Setono\CoolRunner\Client\Response\ResponseInterface;
 
 /**
  * @template T
  */
-final class Collection
+final class Collection implements \Countable, \IteratorAggregate
 {
     /** @var list<T> */
     private array $entries = [];
@@ -18,12 +19,16 @@ final class Collection
     /**
      * @param class-string $entryClass
      */
-    public static function fromResponse(ResponseInterface $response, string $entryClass, string $key): self
+    public static function fromResponse(ResponseInterface $response, string $entryClass): self
     {
-        Psl\invariant(method_exists($entryClass, 'fromArray'), 'The $entryClass MUST have the static method "fromArray(array $data)"');
+        Psl\invariant(method_exists($entryClass, 'fromArray'), 'The $entryClass %s MUST have the static method "fromArray(array $data)"', $entryClass);
 
         $data = $response->toArray();
-        Psl\invariant(isset($data[$key]), 'The key "%s" does not exist on the response array', $key);
+
+        // find the collection key
+        $keys = array_keys($data);
+        Psl\invariant(count($keys) === 1, 'There MUST only be one key on the collection');
+        $key = $keys[0];
 
         $collection = new self();
 
@@ -35,5 +40,15 @@ final class Collection
         }
 
         return $collection;
+    }
+
+    public function count(): int
+    {
+        return count($this->entries);
+    }
+
+    public function getIterator(): ArrayIterator
+    {
+        return new ArrayIterator($this->entries);
     }
 }
