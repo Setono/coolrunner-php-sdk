@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Setono\CoolRunner\Client\Response;
 
+use Psl;
 use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
 use Psr\Http\Message\StreamInterface;
-use Webmozart\Assert\Assert;
 
 final class Response implements ResponseInterface
 {
@@ -29,10 +29,10 @@ final class Response implements ResponseInterface
      */
     public function withProtocolVersion($version): self
     {
-        // todo we should probably clone $this first and then overwrite the decorated
-        $this->decorated = $this->decorated->withProtocolVersion($version);
+        $clone = clone $this;
+        $clone->decorated = $clone->decorated->withProtocolVersion($version);
 
-        return $this;
+        return $clone;
     }
 
     public function getHeaders(): array
@@ -63,9 +63,10 @@ final class Response implements ResponseInterface
      */
     public function withHeader($name, $value): self
     {
-        $this->decorated = $this->decorated->withHeader($name, $value);
+        $clone = clone $this;
+        $clone->decorated = $clone->decorated->withHeader($name, $value);
 
-        return $this;
+        return $clone;
     }
 
     /**
@@ -76,9 +77,10 @@ final class Response implements ResponseInterface
      */
     public function withAddedHeader($name, $value): self
     {
-        $this->decorated = $this->decorated->withAddedHeader($name, $value);
+        $clone = clone $this;
+        $clone->decorated = $clone->decorated->withAddedHeader($name, $value);
 
-        return $this;
+        return $clone;
     }
 
     /**
@@ -88,9 +90,10 @@ final class Response implements ResponseInterface
      */
     public function withoutHeader($name): self
     {
-        $this->decorated = $this->decorated->withoutHeader($name);
+        $clone = clone $this;
+        $clone->decorated = $clone->decorated->withoutHeader($name);
 
-        return $this;
+        return $clone;
     }
 
     public function getBody(): StreamInterface
@@ -103,9 +106,10 @@ final class Response implements ResponseInterface
      */
     public function withBody(StreamInterface $body): self
     {
-        $this->decorated = $this->decorated->withBody($body);
+        $clone = clone $this;
+        $clone->decorated = $clone->decorated->withBody($body);
 
-        return $this;
+        return $clone;
     }
 
     public function getStatusCode(): int
@@ -121,9 +125,10 @@ final class Response implements ResponseInterface
      */
     public function withStatus($code, $reasonPhrase = ''): self
     {
-        $this->decorated = $this->decorated->withStatus($code, $reasonPhrase);
+        $clone = clone $this;
+        $clone->decorated = $clone->decorated->withStatus($code, $reasonPhrase);
 
-        return $this;
+        return $clone;
     }
 
     public function getReasonPhrase(): string
@@ -134,7 +139,7 @@ final class Response implements ResponseInterface
     public function toArray(): array
     {
         $data = json_decode((string) $this->getBody(), true, 512, \JSON_THROW_ON_ERROR);
-        Assert::isArray($data);
+        Psl\invariant(is_array($data), 'The decoded JSON MUST be of type array');
 
         return $data;
     }
