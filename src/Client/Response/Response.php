@@ -22,6 +22,11 @@ final class Response implements ResponseInterface
         return $this->decorated->getProtocolVersion();
     }
 
+    /**
+     * @param string $version
+     *
+     * @return static
+     */
     public function withProtocolVersion($version): self
     {
         // todo we should probably clone $this first and then overwrite the decorated
@@ -50,6 +55,12 @@ final class Response implements ResponseInterface
         return $this->decorated->getHeaderLine($name);
     }
 
+    /**
+     * @param string $name
+     * @param string|string[] $value
+     *
+     * @return static
+     */
     public function withHeader($name, $value): self
     {
         $this->decorated = $this->decorated->withHeader($name, $value);
@@ -57,6 +68,12 @@ final class Response implements ResponseInterface
         return $this;
     }
 
+    /**
+     * @param string $name
+     * @param string|string[] $value
+     *
+     * @return static
+     */
     public function withAddedHeader($name, $value): self
     {
         $this->decorated = $this->decorated->withAddedHeader($name, $value);
@@ -64,6 +81,11 @@ final class Response implements ResponseInterface
         return $this;
     }
 
+    /**
+     * @param string $name
+     *
+     * @return static
+     */
     public function withoutHeader($name): self
     {
         $this->decorated = $this->decorated->withoutHeader($name);
@@ -76,6 +98,9 @@ final class Response implements ResponseInterface
         return $this->decorated->getBody();
     }
 
+    /**
+     * @return static
+     */
     public function withBody(StreamInterface $body): self
     {
         $this->decorated = $this->decorated->withBody($body);
@@ -88,6 +113,12 @@ final class Response implements ResponseInterface
         return $this->decorated->getStatusCode();
     }
 
+    /**
+     * @param int $code
+     * @param string $reasonPhrase
+     *
+     * @return static
+     */
     public function withStatus($code, $reasonPhrase = ''): self
     {
         $this->decorated = $this->decorated->withStatus($code, $reasonPhrase);
