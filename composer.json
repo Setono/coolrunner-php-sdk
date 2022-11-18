@@ -12,6 +12,7 @@
     "require": {
         "php": ">=7.4",
         "ext-json": "*",
+        "azjezz/psl": "^1.6",
         "php-http/discovery": "^1.14",
         "psr/http-client": "^1.0",
         "psr/http-client-implementation": "^1",
@@ -23,6 +24,7 @@
         "infection/infection": "^0.26",
         "kriswallsmith/buzz": "^1.2",
         "nyholm/psr7": "^1.5",
+        "php-standard-library/psalm-plugin": "^1.1",
         "phpspec/prophecy-phpunit": "^2.0",
         "phpunit/phpunit": "^9.5",
         "psalm/plugin-phpunit": "^0.18",
