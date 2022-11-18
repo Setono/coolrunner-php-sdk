@@ -57,11 +57,6 @@ final class Client implements ClientInterface
         return $this->servicepointsEndpoint;
     }
 
-    public function setHost(string $host): void
-    {
-        $this->host = $host;
-    }
-
     public function setHttpClient(?HttpClientInterface $httpClient): void
     {
         $this->httpClient = $httpClient;
