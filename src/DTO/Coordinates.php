@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Setono\CoolRunner\Client\Response\DTO;
+namespace Setono\CoolRunner\DTO;
+
+use Psl\Type;
 
 final class Coordinates
 {
@@ -20,6 +22,18 @@ final class Coordinates
 
     public static function fromArray(array $data): self
     {
+        $specification = Type\shape([
+            'latitude' => Type\float(),
+            'longitude' => Type\float(),
+        ]);
+
+        $data = $specification->assert($data);
+
         return new self($data['latitude'], $data['longitude']);
+    }
+
+    public function __toString(): string
+    {
+        return sprintf('%F, %F', $this->latitude, $this->longitude);
     }
 }

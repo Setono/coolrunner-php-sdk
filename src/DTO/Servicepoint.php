@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Setono\CoolRunner\Client\Response\DTO;
+namespace Setono\CoolRunner\DTO;
 
-final class Servicepoint implements FromArrayInstantiable
+use Psl\Type;
+
+final class Servicepoint
 {
     /** @readonly */
     public string $id;
@@ -46,6 +48,17 @@ final class Servicepoint implements FromArrayInstantiable
 
     public static function fromArray(array $data): self
     {
+        $specification = Type\shape([
+            'id' => Type\string(),
+            'name' => Type\string(),
+            'distance' => Type\optional(Type\int()),
+            'address' => Type\shape([], true),
+            'coordinates' => Type\shape([], true),
+            'opening_hours' => Type\shape([], true),
+        ]);
+
+        $data = $specification->assert($data);
+
         return new self(
             $data['id'],
             $data['name'],

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Setono\CoolRunner\Client\Response\DTO\OpeningHours;
+namespace Setono\CoolRunner\DTO\OpeningHours;
 
 final class Time
 {
@@ -20,17 +20,17 @@ final class Time
 
     public static function fromString(?string $value): self
     {
-        if(null === $value || '' === $value) {
+        if (null === $value || '' === $value) {
             return new self(0, 0);
         }
 
         [$hours, $minutes] = explode(':', $value);
 
-        return new self($hours, $minutes);
+        return new self((int) $hours, (int) $minutes);
     }
 
     public function __toString(): string
     {
-        return $this->hours . ':' . $this->minutes;
+        return sprintf('%02d:%02d', $this->hours, $this->minutes);
     }
 }

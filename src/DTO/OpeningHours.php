@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Setono\CoolRunner\Client\Response\DTO;
+namespace Setono\CoolRunner\DTO;
 
-use Setono\CoolRunner\Client\Response\DTO\OpeningHours\Day;
+use Psl\Type;
+use Setono\CoolRunner\DTO\OpeningHours\Day;
 
 final class OpeningHours
 {
@@ -47,9 +48,20 @@ final class OpeningHours
         $this->sunday = $sunday;
     }
 
-
     public static function fromArray(array $data): self
     {
+        $specification = Type\shape([
+            'monday' => Type\shape([], true),
+            'tuesday' => Type\shape([], true),
+            'wednesday' => Type\shape([], true),
+            'thursday' => Type\shape([], true),
+            'friday' => Type\shape([], true),
+            'saturday' => Type\shape([], true),
+            'sunday' => Type\shape([], true),
+        ]);
+
+        $data = $specification->assert($data);
+
         return new self(
             Day::fromArray($data['monday']),
             Day::fromArray($data['tuesday']),
