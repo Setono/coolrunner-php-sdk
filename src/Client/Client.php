@@ -9,7 +9,6 @@ use Http\Discovery\Psr18ClientDiscovery;
 use Psr\Http\Client\ClientInterface as HttpClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamFactoryInterface;
 use Setono\CoolRunner\Client\Endpoint\ServicepointsEndpoint;
 use Setono\CoolRunner\Client\Endpoint\ServicepointsEndpointInterface;
 
@@ -20,8 +19,6 @@ final class Client implements ClientInterface
     private ?HttpClientInterface $httpClient = null;
 
     private ?RequestFactoryInterface $requestFactory = null;
-
-    private ?StreamFactoryInterface $streamFactory = null;
 
     private string $username;
 
@@ -64,11 +61,6 @@ final class Client implements ClientInterface
         $this->requestFactory = $requestFactory;
     }
 
-    public function setStreamFactory(?StreamFactoryInterface $streamFactory): void
-    {
-        $this->streamFactory = $streamFactory;
-    }
-
     private function getHttpClient(): HttpClientInterface
     {
         if (null === $this->httpClient) {
@@ -85,14 +77,5 @@ final class Client implements ClientInterface
         }
 
         return $this->requestFactory;
-    }
-
-    private function getStreamFactory(): StreamFactoryInterface
-    {
-        if (null === $this->streamFactory) {
-            $this->streamFactory = Psr17FactoryDiscovery::findStreamFactory();
-        }
-
-        return $this->streamFactory;
     }
 }
