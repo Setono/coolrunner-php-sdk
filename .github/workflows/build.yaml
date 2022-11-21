@@ -60,6 +60,9 @@ jobs:
                 dependencies:
                     - "highest"
 
+                exclude:
+                    -   php-version: "7.4"
+
         steps:
             -   name: "Checkout"
                 uses: "actions/checkout@v3"
@@ -78,7 +81,7 @@ jobs:
                     dependency-versions: "${{ matrix.dependencies }}"
 
             -   name: "Run maglnet/composer-require-checker"
-                run: "composer-require-checker check --config-file=$(pwd)/composer-require-checker.json" # todo the config file should be unnecessary when we drop PHP 7.4
+                run: "composer-require-checker check"
 
             -   name: "Run composer-unused/composer-unused"
                 run: "composer-unused"
