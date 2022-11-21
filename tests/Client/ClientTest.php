@@ -35,6 +35,18 @@ final class ClientTest extends TestCase
         self::assertSame('https://api.coolrunner.dk/v3/servicepoints/gls?street=Highway%201', (string) $httpClient->lastRequest->getUri());
         self::assertSame($expectedAuthorizationHeader, $httpClient->lastRequest->getHeaderLine('Authorization'));
     }
+
+    /**
+     * @test
+     */
+    public function it_returns_same_servicepoints_endpoint(): void
+    {
+        $client = new Client('username', 'token');
+        $servicepointsEndpoint = $client->servicepoints();
+
+        // this checks that we get the same instance for each call
+        self::assertSame($servicepointsEndpoint, $client->servicepoints());
+    }
 }
 
 final class MockHttpClient implements HttpClientInterface
