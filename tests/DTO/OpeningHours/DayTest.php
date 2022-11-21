@@ -27,4 +27,14 @@ class DayTest extends TestCase
         yield [['from' => '00:00', 'to' => '00:00'], false];
         yield [['from' => '18:00', 'to' => '15:00'], false];
     }
+
+    public function it_stringifies(): void
+    {
+        $day = Day::fromArray([
+            'from' => '10:00',
+            'to' => '11:00',
+        ]);
+
+        self::assertSame('10:00 - 11:00', (string) $day);
+    }
 }

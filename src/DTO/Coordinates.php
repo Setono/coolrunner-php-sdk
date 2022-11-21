@@ -32,6 +32,6 @@ final class Coordinates
 
     public function __toString(): string
     {
-        return sprintf('%F, %F', $this->latitude, $this->longitude);
+        return sprintf('%s, %s', $this->latitude, $this->longitude);
     }
 }
