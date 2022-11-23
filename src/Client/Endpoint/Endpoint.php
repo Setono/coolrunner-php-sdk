@@ -4,14 +4,27 @@ declare(strict_types=1);
 
 namespace Setono\CoolRunner\Client\Endpoint;
 
+use CuyZ\Valinor\Mapper\Source\Source;
+use CuyZ\Valinor\MapperBuilder;
+use Psr\Http\Message\ResponseInterface;
 use Setono\CoolRunner\Client\ClientInterface;
 
 abstract class Endpoint implements EndpointInterface
 {
     protected ClientInterface $client;
 
-    public function __construct(ClientInterface $client)
+    protected MapperBuilder $mapperBuilder;
+
+    public function __construct(ClientInterface $client, MapperBuilder $mapperBuilder)
     {
         $this->client = $client;
+        $this->mapperBuilder = $mapperBuilder;
+    }
+
+    protected function createSourceFromResponse(ResponseInterface $response): Source
+    {
+        return Source::json((string) $response->getBody())
+            ->camelCaseKeys()
+        ;
     }
 }

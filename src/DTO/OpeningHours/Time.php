@@ -6,10 +6,8 @@ namespace Setono\CoolRunner\DTO\OpeningHours;
 
 final class Time
 {
-    /** @readonly */
     public int $hours;
 
-    /** @readonly */
     public int $minutes;
 
     public function __construct(int $hours, int $minutes)

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Setono\CoolRunner\Client\Endpoint;
 
-use Psr\Http\Message\ResponseInterface;
+use CuyZ\Valinor\Mapper\MappingError;
+use Setono\CoolRunner\DTO\Servicepoint;
+use Setono\CoolRunner\DTO\ServicepointCollection;
 
 final class ServicepointsEndpoint extends Endpoint implements ServicepointsEndpointInterface
 {
@@ -15,8 +17,8 @@ final class ServicepointsEndpoint extends Endpoint implements ServicepointsEndpo
         string $zipCode,
         string $city,
         int $limit = 10
-    ): ResponseInterface {
-        return $this->client->get(sprintf(
+    ): ServicepointCollection {
+        $response = $this->client->get(sprintf(
             'servicepoints/%s?country_code=%s&street=%s&zip_code=%s&city=%s&limit=%d',
             $carrier,
             $countryCode,
@@ -25,10 +27,20 @@ final class ServicepointsEndpoint extends Endpoint implements ServicepointsEndpo
             $city,
             $limit
         ));
+
+        return $this->mapperBuilder->mapper()
+            ->map(ServicepointCollection::class, $this->createSourceFromResponse($response));
     }
 
-    public function findById(string $carrier, string $id): ResponseInterface
+    public function findById(string $carrier, string $id): ?Servicepoint
     {
-        return $this->client->get(sprintf('servicepoints/%s/%s', $carrier, $id));
+        $response = $this->client->get(sprintf('servicepoints/%s/%s', $carrier, $id));
+
+        try {
+            return $this->mapperBuilder->mapper()
+                ->map(Servicepoint::class, $this->createSourceFromResponse($response));
+        } catch (MappingError $e) {
+            return null;
+        }
     }
 }
