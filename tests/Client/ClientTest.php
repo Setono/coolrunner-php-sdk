@@ -39,6 +39,18 @@ final class ClientTest extends TestCase
     /**
      * @test
      */
+    public function it_returns_same_products_endpoint(): void
+    {
+        $client = new Client('username', 'token');
+        $productsEndpoint = $client->products();
+
+        // this checks that we get the same instance for each call
+        self::assertSame($productsEndpoint, $client->products());
+    }
+
+    /**
+     * @test
+     */
     public function it_returns_same_servicepoints_endpoint(): void
     {
         $client = new Client('username', 'token');
