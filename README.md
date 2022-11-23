@@ -11,7 +11,7 @@ Consume the [CoolRunner API v3](https://docs.coolrunner.dk/#d1392cf1-6995-49c3-a
 ## Installation
 
 ```bash
-$ composer require setono/coolrunner-php-sdk
+composer require setono/coolrunner-php-sdk
 ```
 
 ## Usage
