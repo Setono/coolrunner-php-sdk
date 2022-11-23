@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Setono\CoolRunner\DTO;
 
 use Psl\Type;
+use Setono\CoolRunner\Exception\InvalidDataException;
 
 final class Servicepoint
 {
@@ -48,14 +49,20 @@ final class Servicepoint
 
     public static function fromArray(array $data): self
     {
-        $data = Type\shape([
+        $specification = Type\shape([
             'id' => Type\string(),
             'name' => Type\string(),
-            'distance' => Type\optional(Type\int()),
+            'distance' => Type\nullable(Type\int()),
             'address' => Type\shape([], true),
             'coordinates' => Type\shape([], true),
             'opening_hours' => Type\shape([], true),
-        ])->assert($data);
+        ]);
+
+        try {
+            $data = $specification->coerce($data);
+        } catch (Type\Exception\CoercionException $e) {
+            throw InvalidDataException::fromCoercionException($e, $specification, $data);
+        }
 
         return new self(
             $data['id'],

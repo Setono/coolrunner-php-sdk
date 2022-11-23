@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Setono\CoolRunner\DTO\OpeningHours;
 
 use Psl\Type;
+use Setono\CoolRunner\Exception\InvalidDataException;
 
 final class Day
 {
@@ -20,10 +21,16 @@ final class Day
 
     public static function fromArray(array $data): self
     {
-        $data = Type\shape([
+        $specification = Type\shape([
             'from' => Type\string(),
             'to' => Type\string(),
-        ])->assert($data);
+        ]);
+
+        try {
+            $data = $specification->coerce($data);
+        } catch (Type\Exception\CoercionException $e) {
+            throw InvalidDataException::fromCoercionException($e, $specification, $data);
+        }
 
         return new self(Time::fromString($data['from']), Time::fromString($data['to']));
     }
