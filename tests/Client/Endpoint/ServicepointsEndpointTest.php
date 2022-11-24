@@ -69,7 +69,7 @@ JSON);
     /**
      * @test
      */
-    public function it_returns_if_no_service_point_is_found(): void
+    public function it_returns_null_if_no_service_point_is_found(): void
     {
         $client = $this->createClient('{}');
 
