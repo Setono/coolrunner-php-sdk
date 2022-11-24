@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\CoolRunner\Client;
 
+use CuyZ\Valinor\MapperBuilder;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
 use Psr\Http\Client\ClientInterface as HttpClientInterface;
@@ -13,6 +14,7 @@ use Setono\CoolRunner\Client\Endpoint\ProductsEndpoint;
 use Setono\CoolRunner\Client\Endpoint\ProductsEndpointInterface;
 use Setono\CoolRunner\Client\Endpoint\ServicepointsEndpoint;
 use Setono\CoolRunner\Client\Endpoint\ServicepointsEndpointInterface;
+use Setono\CoolRunner\DTO\OpeningHours\Time;
 
 final class Client implements ClientInterface
 {
@@ -28,10 +30,20 @@ final class Client implements ClientInterface
 
     private string $token;
 
-    public function __construct(string $username, string $token)
+    private MapperBuilder $mapperBuilder;
+
+    public function __construct(string $username, string $token, MapperBuilder $mapperBuilder = null)
     {
         $this->username = $username;
         $this->token = $token;
+
+        $mapperBuilder = ($mapperBuilder ?? new MapperBuilder())
+            ->enableFlexibleCasting()
+            ->allowSuperfluousKeys()
+            ->registerConstructor([Time::class, 'fromString'])
+        ;
+
+        $this->mapperBuilder = $mapperBuilder;
     }
 
     public function get(string $uri): ResponseInterface
@@ -49,7 +61,7 @@ final class Client implements ClientInterface
     public function products(): ProductsEndpointInterface
     {
         if (null === $this->productsEndpoint) {
-            $this->productsEndpoint = new ProductsEndpoint($this);
+            $this->productsEndpoint = new ProductsEndpoint($this, $this->mapperBuilder);
         }
 
         return $this->productsEndpoint;
@@ -58,7 +70,7 @@ final class Client implements ClientInterface
     public function servicepoints(): ServicepointsEndpointInterface
     {
         if (null === $this->servicepointsEndpoint) {
-            $this->servicepointsEndpoint = new ServicepointsEndpoint($this);
+            $this->servicepointsEndpoint = new ServicepointsEndpoint($this, $this->mapperBuilder);
         }
 
         return $this->servicepointsEndpoint;

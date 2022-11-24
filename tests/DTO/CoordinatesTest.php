@@ -16,10 +16,7 @@ final class CoordinatesTest extends TestCase
      */
     public function it_stringifies(): void
     {
-        $coordinates = Coordinates::fromArray([
-            'latitude' => 57.123,
-            'longitude' => 98.31,
-        ]);
+        $coordinates = new Coordinates(57.123, 98.31);
 
         self::assertSame('57.123, 98.31', (string) $coordinates);
     }
