@@ -9,6 +9,7 @@ use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
 use Psr\Http\Client\ClientInterface as HttpClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Setono\CoolRunner\Client\Endpoint\ProductsEndpoint;
 use Setono\CoolRunner\Client\Endpoint\ProductsEndpointInterface;
@@ -18,6 +19,10 @@ use Setono\CoolRunner\DTO\OpeningHours\Time;
 
 final class Client implements ClientInterface
 {
+    private ?RequestInterface $lastRequest = null;
+
+    private ?ResponseInterface $lastResponse = null;
+
     private ?ProductsEndpointInterface $productsEndpoint = null;
 
     private ?ServicepointsEndpointInterface $servicepointsEndpoint = null;
@@ -46,16 +51,28 @@ final class Client implements ClientInterface
         $this->mapperBuilder = $mapperBuilder;
     }
 
+    public function getLastRequest(): ?RequestInterface
+    {
+        return $this->lastRequest;
+    }
+
+    public function getLastResponse(): ?ResponseInterface
+    {
+        return $this->lastResponse;
+    }
+
     public function get(string $uri): ResponseInterface
     {
         $url = sprintf('https://api.coolrunner.dk/v3/%s', $uri);
 
-        return $this->getHttpClient()
-            ->sendRequest(
-                $this->getRequestFactory()
-                    ->createRequest('GET', $url)
-                    ->withHeader('Authorization', sprintf('Basic %s', base64_encode($this->username . ':' . $this->token)))
-            );
+        $this->lastRequest = $this->getRequestFactory()
+            ->createRequest('GET', $url)
+            ->withHeader('Authorization', sprintf('Basic %s', base64_encode($this->username . ':' . $this->token)))
+        ;
+
+        $this->lastResponse = $this->getHttpClient()->sendRequest($this->lastRequest);
+
+        return $this->lastResponse;
     }
 
     public function products(): ProductsEndpointInterface
