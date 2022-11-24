@@ -27,7 +27,11 @@ final class ServicepointsEndpointTest extends TestCase
 JSON);
         $servicepoints = $client->servicepoints()->find('gls', 'DK', 'Stigsborgvej 60 4. th.', '9400', 'Nørresundby', 10);
 
+        $lastRequest = $client->getLastRequest();
+
         self::assertCount(10, $servicepoints);
+        self::assertNotNull($lastRequest);
+        self::assertSame('https://api.coolrunner.dk/v3/servicepoints/gls?country_code=DK&street=Stigsborgvej%2060%204.%20th.&zip_code=9400&city=N%C3%B8rresundby&limit=10', (string) $lastRequest->getUri());
 
         foreach ($servicepoints as $servicepoint) {
             self::assertInstanceOf(Servicepoint::class, $servicepoint);
@@ -43,6 +47,10 @@ JSON);
 {"id":"97891","name":"Shell 7-Eleven N\u00f8rresundby","address":{"street":"\u00d8stergade 27-29","zip_code":"9400","city":"N\u00f8rresundby","country_code":"DK"},"coordinates":{"latitude":57.0588,"longitude":9.92832},"opening_hours":{"monday":{"from":"06:00","to":"23:00"},"tuesday":{"from":"06:00","to":"23:00"},"wednesday":{"from":"06:00","to":"23:00"},"thursday":{"from":"06:00","to":"23:00"},"friday":{"from":"06:00","to":"23:00"},"saturday":{"from":"07:00","to":"23:00"},"sunday":{"from":"07:00","to":"23:00"}}}
 JSON);
         $servicepoint = $client->servicepoints()->findById('gls', '97891');
+
+        $lastRequest = $client->getLastRequest();
+        self::assertNotNull($lastRequest);
+        self::assertSame('https://api.coolrunner.dk/v3/servicepoints/gls/97891', (string) $lastRequest->getUri());
 
         self::assertNotNull($servicepoint);
 
