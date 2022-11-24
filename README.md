@@ -26,13 +26,11 @@ use Setono\CoolRunner\DTO\Servicepoint;
 require_once '../vendor/autoload.php';
 
 $client = new Client('USERNAME', 'TOKEN');
-$response = $client
+
+$servicepoints = $client
     ->servicepoints()
     ->find('gls', 'DK', 'Stigsborgvej 60 4. th.', '9400', 'Nørresundby')
 ;
-
-/** @var list<Servicepoint> $servicepoints */
-$servicepoints = Collection::fromResponse($response, Servicepoint::class);
 
 foreach ($servicepoints as $servicepoint) {
     echo $servicepoint->name . "\n";
