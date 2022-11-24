@@ -61,6 +61,30 @@ DK
 ...
 ```
 
+## Production usage
+
+Internally this library uses the [CuyZ/Valinor](https://github.com/CuyZ/Valinor) library which is particularly well suited
+for turning API responses in DTOs. However, this library has some overhead and works best with a cache enabled.
+
+When you instantiate the `Client` you can provide a `MapperBuilder` instance. Use this opportunity to set a cache:
+
+```php
+<?php
+
+use CuyZ\Valinor\Cache\FileSystemCache;
+use CuyZ\Valinor\MapperBuilder;
+use Setono\CoolRunner\Client\Client;
+use Setono\CoolRunner\DTO\Collection;
+use Setono\CoolRunner\DTO\Servicepoint;
+
+require_once '../vendor/autoload.php';
+
+$cache = new FileSystemCache('path/to/cache-directory');
+$client = new Client('USERNAME', 'TOKEN', (new MapperBuilder())->withCache($cache));
+```
+
+You can read more about it here: [Valinor: Performance and caching](https://valinor.cuyz.io/latest/other/performance-and-cache/).
+
 [ico-version]: https://poser.pugx.org/setono/coolrunner-php-sdk/v/stable
 [ico-license]: https://poser.pugx.org/setono/coolrunner-php-sdk/license
 [ico-github-actions]: https://github.com/Setono/coolrunner-php-sdk/workflows/build/badge.svg
