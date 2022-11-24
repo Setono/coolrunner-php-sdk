@@ -31,6 +31,8 @@ final class ClientTest extends TestCase
         $client->get('servicepoints/gls?street=Highway 1');
 
         self::assertNotNull($httpClient->lastRequest);
+        self::assertNotNull($client->getLastResponse());
+        self::assertNotNull($client->getLastRequest());
         self::assertSame('GET', $httpClient->lastRequest->getMethod());
         self::assertSame('https://api.coolrunner.dk/v3/servicepoints/gls?street=Highway%201', (string) $httpClient->lastRequest->getUri());
         self::assertSame($expectedAuthorizationHeader, $httpClient->lastRequest->getHeaderLine('Authorization'));
