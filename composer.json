@@ -23,7 +23,6 @@
         "infection/infection": "^0.26",
         "kriswallsmith/buzz": "^1.2",
         "nyholm/psr7": "^1.5",
-        "php-standard-library/psalm-plugin": "^1.1",
         "phpspec/prophecy-phpunit": "^2.0",
         "phpunit/phpunit": "^9.5",
         "psalm/plugin-phpunit": "^0.18",
