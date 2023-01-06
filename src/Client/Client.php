@@ -35,20 +35,12 @@ final class Client implements ClientInterface
 
     private string $token;
 
-    private MapperBuilder $mapperBuilder;
+    private ?MapperBuilder $mapperBuilder = null;
 
-    public function __construct(string $username, string $token, MapperBuilder $mapperBuilder = null)
+    public function __construct(string $username, string $token)
     {
         $this->username = $username;
         $this->token = $token;
-
-        $mapperBuilder = ($mapperBuilder ?? new MapperBuilder())
-            ->enableFlexibleCasting()
-            ->allowSuperfluousKeys()
-            ->registerConstructor([Time::class, 'fromString'])
-        ;
-
-        $this->mapperBuilder = $mapperBuilder;
     }
 
     public function getLastRequest(): ?RequestInterface
@@ -78,7 +70,7 @@ final class Client implements ClientInterface
     public function products(): ProductsEndpointInterface
     {
         if (null === $this->productsEndpoint) {
-            $this->productsEndpoint = new ProductsEndpoint($this, $this->mapperBuilder);
+            $this->productsEndpoint = new ProductsEndpoint($this, $this->getMapperBuilder());
         }
 
         return $this->productsEndpoint;
@@ -87,10 +79,28 @@ final class Client implements ClientInterface
     public function servicepoints(): ServicepointsEndpointInterface
     {
         if (null === $this->servicepointsEndpoint) {
-            $this->servicepointsEndpoint = new ServicepointsEndpoint($this, $this->mapperBuilder);
+            $this->servicepointsEndpoint = new ServicepointsEndpoint($this, $this->getMapperBuilder());
         }
 
         return $this->servicepointsEndpoint;
+    }
+
+    public function setMapperBuilder(MapperBuilder $mapperBuilder): void
+    {
+        $this->mapperBuilder = $mapperBuilder;
+    }
+
+    private function getMapperBuilder(): MapperBuilder
+    {
+        if (null === $this->mapperBuilder) {
+            $this->mapperBuilder = (new MapperBuilder())
+                ->enableFlexibleCasting()
+                ->allowSuperfluousKeys()
+                ->registerConstructor([Time::class, 'fromString'])
+            ;
+        }
+
+        return $this->mapperBuilder;
     }
 
     public function setHttpClient(?HttpClientInterface $httpClient): void
