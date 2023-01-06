@@ -90,7 +90,7 @@ final class Client implements ClientInterface
         $this->mapperBuilder = $mapperBuilder;
     }
 
-    private function getMapperBuilder(): MapperBuilder
+    public function getMapperBuilder(): MapperBuilder
     {
         if (null === $this->mapperBuilder) {
             $this->mapperBuilder = (new MapperBuilder())
