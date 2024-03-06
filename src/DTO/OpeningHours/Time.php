@@ -6,16 +6,16 @@ namespace Setono\CoolRunner\DTO\OpeningHours;
 
 final class Time
 {
-    public int $hours;
-
-    public int $minutes;
-
-    public function __construct(int $hours, int $minutes)
+    /**
+     * @pure
+     */
+    public function __construct(public readonly int $hours, public readonly int $minutes)
     {
-        $this->hours = $hours;
-        $this->minutes = $minutes;
     }
 
+    /**
+     * @pure
+     */
     public static function fromString(?string $value): self
     {
         if (null === $value || '' === $value) {

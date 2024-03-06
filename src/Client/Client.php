@@ -96,7 +96,7 @@ final class Client implements ClientInterface
             $this->mapperBuilder = (new MapperBuilder())
                 ->enableFlexibleCasting()
                 ->allowSuperfluousKeys()
-                ->registerConstructor([Time::class, 'fromString'])
+                ->registerConstructor(Time::fromString(...))
             ;
         }
 

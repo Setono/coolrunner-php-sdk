@@ -18,7 +18,7 @@ interface ServicepointsEndpointInterface extends EndpointInterface
         string $street,
         string $zipCode,
         string $city,
-        int $limit = 10
+        int $limit = 10,
     ): ServicepointCollection;
 
     /**

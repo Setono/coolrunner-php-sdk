@@ -27,7 +27,7 @@ final class Servicepoint
         ?int $distance,
         Address $address,
         Coordinates $coordinates,
-        OpeningHours $openingHours
+        OpeningHours $openingHours,
     ) {
         $this->id = $id;
         $this->name = $name;

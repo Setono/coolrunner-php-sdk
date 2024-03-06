@@ -25,7 +25,7 @@ final class ServicepointCollectionTest extends TestCase
             123,
             new Address('street', '1234', 'city', 'DK'),
             new Coordinates(123.4, 123.4),
-            new OpeningHours($day, $day, $day, $day, $day, $day, $day)
+            new OpeningHours($day, $day, $day, $day, $day, $day, $day),
         );
         $collection = new ServicepointCollection([$servicepoint]);
 

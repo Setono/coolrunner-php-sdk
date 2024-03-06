@@ -16,7 +16,7 @@ final class ServicepointsEndpoint extends Endpoint implements ServicepointsEndpo
         string $street,
         string $zipCode,
         string $city,
-        int $limit = 10
+        int $limit = 10,
     ): ServicepointCollection {
         $response = $this->client->get(sprintf(
             'servicepoints/%s?country_code=%s&street=%s&zip_code=%s&city=%s&limit=%d',
@@ -25,7 +25,7 @@ final class ServicepointsEndpoint extends Endpoint implements ServicepointsEndpo
             $street,
             $zipCode,
             $city,
-            $limit
+            $limit,
         ));
 
         return $this->mapperBuilder->mapper()

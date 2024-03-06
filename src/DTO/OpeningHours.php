@@ -29,7 +29,7 @@ final class OpeningHours
         Day $thursday,
         Day $friday,
         Day $saturday,
-        Day $sunday
+        Day $sunday,
     ) {
         $this->monday = $monday;
         $this->tuesday = $tuesday;
